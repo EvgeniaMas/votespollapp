@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <% include ../partials/stylesheet %>
+</head>
+<body>
+    <% include ../partials/header %>
+<div class="container appName comments_padding">
+
+       
+            <div  id="newPoll" class="col-lg-6 col-sm-12">
+                <button type="button" class="btn btn-success pull-left" data-toggle="modal" data-target="#createPost">
+                    New Votesbox!
+                </button>        
+           </div>
+       
+
+        
+
+<div id ="data">
+<% polls.forEach(function(polls){ %> 
+    
+        <div id ="datas" class="col-md-12">
+          <div class="col-md-5"> 
+                     
+                           <section id = "variants">
+                           <h3 class="list-group-item-heading"><%= polls.title %></h3>                          
+                            <p class="answerPoll answerPoll1"><%= polls.answer1 %></p>
+
+                            <a class="btn btn-large btn-primary pull-right variant"  href="/voting?value=1&id=<%= polls.id %>" >Vote! </a> 
+                            <br>  
+                             <p class="answerPoll answerPoll2"><%= polls.answer2 %></p>
+                             
+                             <a class="btn btn-large btn-primary pull-right variant"  href="/voting?value=2&id=<%= polls.id %>" >Vote! </a> 
+                            <br>  
+                             <p class="answerPoll answerPoll3"><%= polls.answer3 %></p> 
+
+                             <a class="btn btn-large btn-primary pull-right variant"  href="/voting?id=<%=polls.id %>&value=3 " >Vote! </a> 
+                             <br>  
+                            <p class="answerPoll answerPoll4"><%= polls.answer4 %></p> 
+
+                            <a class="btn btn-large btn-primary pull-right variant"  href="/voting?value=4&id=<%= polls.id %>">Vote! </a> 
+                             <br>
+                             <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-text="Check out this poll here:" data-show-count="false">Share on Twitter! <img class="twitter_sign" src="/images/twitter.png"></a> 
+                             </section>
+                  </div> <!-- md-5 closed -->
+
+                         <div class="col-md-7">
+                            <ul id="pollData">  
+                            <li class="answersforvote1 results"><%= polls.votes1 %></li> 
+                            <li class="answersforvote2 results"><%= polls.votes2 %></li> 
+                            <li class="answersforvote3 results"><%= polls.votes3 %></li> 
+                            <li class="answersforvote4 results"><%= polls.votes4 %></li> 
+                            </ul>        
+                                  <h5 id="nothing"></h5> 
+                            <canvas id="myChart"> </canvas> 
+
+                        <button id="showDou" onclick= "showResults ()" class="btn btn-success pull-right">Show votes results!</button>
+                                  
+                         
+                        
+          </div><!-- md-7 closed -->
+          </div><!-- md-12 closed -->
+          
+                                  <% }); %>                
+                                  
+                                
+                          
+               
+                  
+     
+      </div><!-- data closed -->
+    </div><!-- container closed -->
+
+
+  
+<!-- Modal creat message-->
+        <div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="/polls" method="post">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">Create new vote!</h4>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <fieldset class="form-group">
+                                <label  for="inputitle">New vote</label>
+                                <input type="text" id="inputitle" name="title" class="form-control" placeholder="Insert question for vote" required=""> 
+                               
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label  for="inputContent">Insert variant 1 for vote</label>
+                                <input type="text" id="inputContent" name="answer1" class="form-control" placeholder="Variant 1" required=""> 
+                               
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label  for="inputContent">Insert variant 2 for vote</label>
+                                <input type="text" id="inputContent" name="answer2" class="form-control" placeholder="Variant 2" required=""> 
+                                
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label  for="inputContent">Insert variant 3 for vote</label>
+                                <input type="text" id="inputContent" name="answer3" class="form-control" placeholder="Variant 3" required=""> 
+                               
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label  for="inputContent">Insert variant 4 for vote</label>
+                                <input type="text" id="inputContent" name="answer4" class="form-control" placeholder="Variant 4" required=""> 
+                                
+                            </fieldset>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+          </div>
+          
+
+
+
+        <% include ../partials/footer %>
+
+        <% include ../partials/javascript %>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+
+<script>
+     function showResults (e) {
+
+      // for varint with hidden results and button for each poll 
+    var buttonLists = document.getElementById('data').getElementsByTagName('button'); 
+    var pressedButton = event.target;
+    
+    var arr = Array.prototype.slice.call(buttonLists); // to array;
+    var j = arr.indexOf(pressedButton); // The index of pressed button
+    // alert (j);
+    // getting data labels 
+    var title = [];
+    var listTitles = document.getElementById('data').getElementsByTagName('section')[j].getElementsByTagName('p'); 
+    
+    
+    for (let i=0; i<listTitles.length; i ++) {
+       
+        let dataTitle = listTitles[i].innerHTML;
+        
+             title.push(dataTitle);
+
+          }
+         var titles = title;
+
+    // alert(titles);
+
+     // getting data for dougnut 
+    var polls = [];
+    var lists = document.getElementById('data').getElementsByTagName('ul'); 
+    // alert (lists);
+   
+    for (let i=0; i<4; i ++) {
+       
+        let datas = lists[j].children[i].innerHTML;
+        
+             polls.push(datas);
+
+          }
+         var dougnut = polls;
+    // alert(dougnut);
+
+        if(dougnut[0] == false && dougnut[1] == false && dougnut[2] == false && dougnut[3] == false){   
+          var noData = document.getElementById('data').getElementsByTagName('h5')[j];
+          noData.innerHTML = "No votes for this poll yet. Be first and vote!";
+       }
+
+       else { 
+          
+      let myChart = document.getElementById('data').getElementsByTagName('canvas')[j].getContext('2d');
+         
+          Chart.defaults.global.defaultFontFamily = 'Lato';
+          Chart.defaults.global.defaultFontSize = 25;
+          Chart.defaults.global.defaultFontColor = '#777';
+
+          let massPopChart = new Chart(myChart,  {
+            type:'doughnut', 
+                  
+            data:{
+               labels:titles,
+              datasets:[{
+               
+                data: dougnut,
+                
+                backgroundColor:[
+                  'rgba(255, 99, 132, 0.6)',
+                  'rgba(54, 162, 235, 0.6)',
+                  'rgba(255, 206, 86, 0.6)',
+                  'rgba(75, 192, 192, 0.6)'
+                  
+                ],
+                borderWidth:1,
+                borderColor:'#777',
+                hoverBorderWidth:3,
+                hoverBorderColor:'#000'
+              }]
+            },
+            options:{
+              title:{
+                display:false,
+                fontSize:23
+              },
+              legend:{
+                display:false,
+                position:'right',
+                labels:{
+                  fontColor:'#000'
+                }
+              },
+              layout:{
+                padding:{
+                  left:50,
+                  right:0,
+                  bottom:0,
+                  top:0
+                }
+              },
+              tooltips:{
+                enabled:true
+              }
+            }
+          });                 
+ 
+}
+}
+
+</script>
+      
+    </body>
+    </html>

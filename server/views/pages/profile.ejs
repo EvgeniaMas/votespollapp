@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <% include ../partials/stylesheet %>
+</head>
+<body>
+    <% include ../partials/header %>
+
+    <div class="container  appName">
+        <h1><%= title %></h1>
+        <div class="datails">
+
+            <div class="card text-xs-center appName">
+                <br>
+                <img class="card-img-top" src="<%= avatar %>" alt="Card image cap">
+                <div class="card-block">
+                   
+                    <p class="card-text">
+                        <strong>Name</strong>: <%= user.local.name %><br>
+                        <strong>Email</strong>: <%= user.local.email %>
+                    </p>
+                    <a href="/logout" class="btn btn-large btn-primary">Logout</a>
+                </div>
+            </div>
+        </div>
+        
+   <br>
+   <div class="row">
+            
+            <% polls.forEach(function(polls){ %>
+             <% if (user.id === polls.user.id) { %> 
+                <div class="col-lg-4">
+                 <figcaption class="figure-caption"><%= polls.title %></figcaption>
+                    <figure class="figure">
+                        <a href ="/delete/<%= polls.id %>" aria-hidden="true"><img class="deleteIMG" src="images/delete.png"></a>
+                    </figure>
+                </div>
+                <% } %>
+            <% }); %>
+         
+   </div>
+
+
+</div>
+        <% include ../partials/footer %>
+        <% include ../partials/javascript %>
+
+
+ 
+    </body>
+    </html>
